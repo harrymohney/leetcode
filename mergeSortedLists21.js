@@ -1,4 +1,3 @@
-*/
 /**
  * @param {ListNode} list1
  * @param {ListNode} list2
