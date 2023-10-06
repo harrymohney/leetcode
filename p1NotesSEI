@@ -1,0 +1,352 @@
+// init variables
+const questions = [
+  {
+    question: 'What is the functionality of the "mv" command in the terminal?',
+    options: [
+      {
+        text: 'move',
+        correct: false
+      },
+      {
+        text: 'copy',
+        correct: false
+      },
+      {
+        text: 'rename',
+        correct: false
+      },
+      {
+        text: 'all of the above',
+        correct: true
+      },
+    ]
+  },
+  {
+    question: 'What css rule is used for changing any HTML element into a flexbox container?',
+    options: [
+      {
+        text: 'flexbox',
+        correct: false
+      },
+      {
+        text: 'grid',
+        correct: false
+      },
+      {
+        text: 'container',
+        correct: false
+      },
+      {
+        text: 'display',
+        correct: true
+      }
+    ]
+  },
+  {
+    question: 'Which array property is used in `for loop` for iterating through the entire list?',
+    options: [
+      {
+        text: '.stretch',
+        correct: false
+      },
+      {
+        text: '.indexOf',
+        correct: false
+      },
+      {
+        text: '.length',
+        correct: true
+      },
+      {
+        text: '.forEach',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'What is the method of adding and/or omitting an index in an array?',
+    options: [
+      {
+        text: '.push()',
+        correct: false
+      },
+      {
+        text: '.splice()',
+        correct: true
+      },
+      {
+        text: '.pop()',
+        correct: false
+      },
+      {
+        text: '.shift()',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'A functions (answer1) are passed in when the function is invoked, it differs from (answer2) because they are variables declared in the function definition an used within the function body when invoked.',
+    options: [
+      {
+        text: 'parameter, argument',
+        correct: false
+      },
+      {
+        text: 'argument, callback',
+        correct: false
+      },
+      {
+        text: 'parameter, return',
+        correct: false
+      },
+      {
+        text: 'argument, parameter',
+        correct: true
+      }
+    ]
+  },
+  {
+    question: 'What are an object`s `properties` made of?',
+    options: [
+      {
+        text: 'key: value',
+        correct: true
+      },
+      {
+        text: 'value: key',
+        correct: false
+      },
+      {
+        text: 'array: string',
+        correct: false
+      },
+      {
+        text: 'value: property',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'How would you select all <a> elements contained within a div with an id of globalNav?',
+    options: [
+      {
+        text: 'document.querySelector("#globalNav")',
+        correct: false
+      },
+      {
+        text: 'document.querySelectorAll("#globalNav a")',
+        correct: true
+      },
+      {
+        text: 'element.querySelectorAll("#a")',
+        correct: false
+      },
+      {
+        text: 'document.getElementById("#globalNav a")',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'An application that revolves around the management and manipulation of data as its primary focus is what?',
+    options: [
+      {
+        text: 'object-oriented',
+        correct: false
+      },
+      {
+        text: 'DOM-manipulation',
+        correct: false
+      },
+      {
+        text: 'data-centric',
+        correct: true
+      },
+      {
+        text: 'data-oriented',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'Refers to the concept of bundling data and the functions that operate on that data within a single unit.',
+    options: [
+      {
+        text: 'object oriented programming',
+        correct: true
+      },
+      {
+        text: 'DOM',
+        correct: false
+      },
+      {
+        text: 'array',
+        correct: false
+      },
+      {
+        text: 'DRY code',
+        correct: false
+      }
+    ]
+  },
+  {
+    question: 'A way to create blueprints for objects that share common properties and behavior.',
+    options: [
+      {
+        text: 'CSS',
+        correct: false
+      },
+      {
+        text: 'JS classes',
+        correct: true
+      },
+      {
+        text: '<div>',
+        correct: false
+      },
+      {
+        text: 'pseudocode',
+        correct: false
+      }
+    ]
+  }
+];
+
+const startBtn = document.getElementById('start-btn');
+const nextBtn = document.getElementById('next-btn');
+const resetBtn = document.getElementById('reset-btn');
+const scoreDisplay = document.getElementById('score');
+const totalQuestions = questions.length;
+let currentQuestionIndex = 0;
+let score = 0;
+let answerButtons = document.querySelectorAll('.answer');
+let hasAnsweredCurrentQuestion = false;
+
+// render the current question and answers
+function render() {
+  // get current question object from the questions array
+  const currentQuestion = questions[currentQuestionIndex];
+
+  // question display from HTML
+  let containEl = document.getElementById('q-contain');
+
+  // display current question
+  containEl.textContent = currentQuestion.question;
+
+  // iterate through answer options & assign to button
+  answerButtons.forEach(function(btn, idx) {
+    btn.textContent = currentQuestion.options[idx].text;
+
+    // remove answered styling
+    btn.disabled = false;
+    btn.classList.remove('correct', 'incorrect');
+  });
+
+  // if last question - adjust button visibility
+  if (currentQuestionIndex === totalQuestions) {
+    nextBtn.style.display = 'none';
+    resetBtn.style.display = 'block';
+  } else {
+    nextBtn.style.display = 'block';
+    resetBtn.style.display = 'none';
+  }
+
+  // reset flag - allow user to answer current question
+  hasAnsweredCurrentQuestion = false;
+}
+
+// initialize quiz & set up event listeners
+function init() {
+  // event listener - "Start" button
+  startBtn.addEventListener('click', function() {
+    // hide "Start" button & render first question
+    startBtn.style.display = 'none';
+    render();
+  });
+
+  // event listener - answer buttons
+  answerButtons.forEach(function(btn, idx) {
+    btn.addEventListener('click', function() {
+      // has question been answered?
+      if (!hasAnsweredCurrentQuestion) {
+        // get selected answer index
+        const selectedAnswerIndex = idx;
+
+        // if selected answer correct
+        if (questions[currentQuestionIndex].options[selectedAnswerIndex].correct) {
+          // increment score & display
+          score++;
+          scoreDisplay.textContent = 'Score: ' + score;
+
+          // add 'correct' styling feedback
+          btn.classList.add('correct');
+        } else {
+          // add 'incorrect' styling feedback
+          btn.classList.add('incorrect');
+        }
+
+        // disable answer buttons - prevent changing answer/logging points
+        answerButtons.forEach(function(btn) {
+          btn.disabled = true;
+        });
+
+        // enable all buttons for the next question if questions left
+        if (currentQuestionIndex < totalQuestions) {
+          answerButtons = document.querySelectorAll('.answer');
+          answerButtons.forEach(function(btn) {
+            btn.disabled = false;
+          });
+        }
+
+        nextBtn.style.display = 'block'; // show
+        resetBtn.style.display = 'none'; // hide
+
+        // set flag - indicate user has answered
+        hasAnsweredCurrentQuestion = true;
+      }
+    });
+  });
+
+  // event listener - "Next" button
+  nextBtn.addEventListener('click', function() {
+    // check if the user has answered the current question
+    if (!hasAnsweredCurrentQuestion) {
+      // if not answered - return - page locked
+      return;
+    }
+
+    // increment current question index
+    currentQuestionIndex++;
+
+    // check question index
+    if (currentQuestionIndex < totalQuestions) {
+      // if more questions - render next question
+      render();
+    } else {
+      // if no more questions - display completion message & final score
+      let containEl = document.getElementById('q-contain');
+      containEl.innerHTML = 'Quiz Completed! Your final score: ' + score + '/' + totalQuestions;
+
+      // display "Reset" to restart game
+      resetBtn.style.display = 'block';
+    }
+  });
+
+  // event listener - "Reset" button
+  resetBtn.addEventListener('click', function() {
+    // reset current question index & score for new game
+    currentQuestionIndex = 0;
+    score = 0;
+    scoreDisplay.textContent = 'Score: ' + score;
+
+    // render first question - hide "Reset"
+    render();
+    resetBtn.style.display = 'none';
+
+    // display "Next" button for new game
+    nextBtn.style.display = 'block';
+  });
+}
+
+// call init() to reset state of game
+init();
